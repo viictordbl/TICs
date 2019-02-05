@@ -35,12 +35,12 @@
 	      if (i %2 == 0){
 		    var timestamp = jsonData_channel_2[j]['created_at'];
 		    var temp = jsonData_channel_2[j]['field1'];
-	        j=j+1;
+	            j=j+1;
 		  }
 		  else {
 		  var timestamp = jasonData_channel_1[k]['created_at'];
 		  var temp = jasonData_channel_1[k]['field1'];
-	      k=k+1;
+	           k=k+1;
 		  }
 		data.addRow([new Date(timestamp), parseFloat(temp)]);
 	  };
@@ -69,12 +69,12 @@
 	  for(var i = 1;i <= length; i++){
 	      if (i %2 == 0){
 		    var timestamp = jsonData_channel_2[j]['created_at'];
-	        var humedad =jsonData_channel_2[j]['field2'];
-			j=j+1;
+	            var humedad =jsonData_channel_2[j]['field2'];
+		    j=j+1;
 		  }
 		  else {
 		  var timestamp = jasonData_channel_1[k]['created_at'];
-	      var humedad =jasonData_channel_1[k]['field2'];
+	          var humedad =jasonData_channel_1[k]['field2'];
 		  k=k+1;
 		  }
 		data.addRow([new Date(timestamp), parseFloat(humedad)]);
@@ -95,9 +95,7 @@
 	</script>
   </head>
   <body>
-    
         <div id = "curve_chart_temperatura" > </div>
-	    <div id = "curve_chart_humedad" > </div>
-	
+	<div id = "curve_chart_humedad" > </div>	
   </body>
 </html>

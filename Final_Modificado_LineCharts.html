@@ -1,12 +1,23 @@
+<!-- @authors: Enaitz Otazua y Victor del Barrio
+     @desc: este programa lee datos almacenados en 
+     dos canales de la plataforma Thingspeak y grafica 
+     sus resultados por pantalla utilizando un navegador web
+-->
 <html>
   <head>
     <title>ESTACION_METEOROLOGICA</title>
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	<script type="text/javascript">
+		
+	/* creación de la variable donde almacenamos los
+	   datos correspondientes al canal 1 */
 	  var jasonData_channel_1;
 	  function capture_data_channel_1(dataWeGotViaJsonp) {
 	    jasonData_channel_1 = dataWeGotViaJsonp['feeds'];
 	  };
+		
+	/* creación de la variable donde almacenamos los
+	   datos correspondientes al canal 2 */
 	  var jsonData_channel_2;
 	  function capture_data_channel_2(dataWeGotViaJsonp) {
 	    jsonData_channel_2 = dataWeGotViaJsonp['feeds'];
@@ -22,6 +33,9 @@
 	google.charts.load('current',{'packages':['corechart']});
 	google.charts.setOnLoadCallback(drawChart_Temperatura);
 	google.charts.setOnLoadCallback(drawChart_Humedad);
+		
+	/* función que dibuja la gráfica con los datos
+	   de temperatura adquiridos desde los dos canales */
 	
 	function drawChart_Temperatura() {
 	  var data = new google.visualization.DataTable();
@@ -57,7 +71,10 @@
 	  var chart = new google.visualization.LineChart (document.getElementById('curve_chart_temperatura'));
 	  chart.draw(data, options);
 	}
-	
+		
+	/* función que dibuja la gráfica con los datos
+	   de humedad adquiridos desde los dos canales */
+		
     function drawChart_Humedad() {
 	  var data = new google.visualization.DataTable();
 	  data.addColumn('datetime','Time');
@@ -95,6 +112,7 @@
 	</script>
   </head>
   <body>
+ <!-- Llamda a las funciones para dibujar las gráficas -->
         <div id = "curve_chart_temperatura" > </div>
 	<div id = "curve_chart_humedad" > </div>	
   </body>

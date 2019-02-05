@@ -1,0 +1,103 @@
+<html>
+  <head>
+    <title>ESTACION_METEOROLOGICA</title>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+	  var jasonData_channel_1;
+	  function capture_data_channel_1(dataWeGotViaJsonp) {
+	    jasonData_channel_1 = dataWeGotViaJsonp['feeds'];
+	  };
+	  var jsonData_channel_2;
+	  function capture_data_channel_2(dataWeGotViaJsonp) {
+	    jsonData_channel_2 = dataWeGotViaJsonp['feeds'];
+	  };
+	</script>
+	<script type="text/javascript" src="
+	https://api.thingspeak.com/channels/693230/feeds.json?api_key=ELAJ1QXXQ3RUMU4N&results=10&callback=capture_data_channel_1">
+	</script>
+	<script type="text/javascript" src="
+	https://api.thingspeak.com/channels/693231/feeds.json?api_key=D9FJA9VYZSX87Z3Z&results=10&callback=capture_data_channel_2">
+	</script>
+	<script type="text/javascript">
+	google.charts.load('current',{'packages':['corechart']});
+	google.charts.setOnLoadCallback(drawChart_Temperatura);
+	google.charts.setOnLoadCallback(drawChart_Humedad);
+	
+	function drawChart_Temperatura() {
+	  var data = new google.visualization.DataTable();
+	  data.addColumn('datetime','Time');
+	  data.addColumn('number','TEMPERATURA');
+	  	  
+	  var length = jasonData_channel_1.length+jsonData_channel_2.length;
+	  var j=0;
+	  var k=0;
+	  for(var i = 1;i <= length; i++){
+	      if (i %2 == 0){
+		    var timestamp = jsonData_channel_2[j]['created_at'];
+		    var temp = jsonData_channel_2[j]['field1'];
+	        j=j+1;
+		  }
+		  else {
+		  var timestamp = jasonData_channel_1[k]['created_at'];
+		  var temp = jasonData_channel_1[k]['field1'];
+	      k=k+1;
+		  }
+		data.addRow([new Date(timestamp), parseFloat(temp)]);
+	  };
+	  
+	  var options = {
+	    title: 'TEMPERATURA', legend: 'none',
+		curveType: 'function', colors: ['red'],
+		series: {0: {targetAxisIndex: 0}},
+		vAxes: {0: {title: 'ºC'}},
+		hAxes: {0: {title: 'tiempo'}},
+		width:1900,
+		height:300
+	  };
+	  var chart = new google.visualization.LineChart (document.getElementById('curve_chart_temperatura'));
+	  chart.draw(data, options);
+	}
+	
+    function drawChart_Humedad() {
+	  var data = new google.visualization.DataTable();
+	  data.addColumn('datetime','Time');
+	  data.addColumn('number','HUMEDAD');
+	  
+	  var length = jasonData_channel_1.length+jsonData_channel_2.length;
+	  var j=0;
+	  var k=0;
+	  for(var i = 1;i <= length; i++){
+	      if (i %2 == 0){
+		    var timestamp = jsonData_channel_2[j]['created_at'];
+	        var humedad =jsonData_channel_2[j]['field2'];
+			j=j+1;
+		  }
+		  else {
+		  var timestamp = jasonData_channel_1[k]['created_at'];
+	      var humedad =jasonData_channel_1[k]['field2'];
+		  k=k+1;
+		  }
+		data.addRow([new Date(timestamp), parseFloat(humedad)]);
+	  };
+	  
+	  var options = {
+	    title: 'HUMEDAD AMBIENTAL', legend: 'none',
+		curveType: 'function', colors: ['blue'],
+		series: {1:{targetAxisIndex: 1}},
+		vAxes: {0: {title: '%'}},
+		hAxes: {0: {title: 'tiempo'}},
+		width:1900,
+		height:300
+	  };
+	  var chart = new google.visualization.LineChart (document.getElementById('curve_chart_humedad'));
+	  chart.draw(data, options);
+	}
+	</script>
+  </head>
+  <body>
+    
+        <div id = "curve_chart_temperatura" > </div>
+	    <div id = "curve_chart_humedad" > </div>
+	
+  </body>
+</html>

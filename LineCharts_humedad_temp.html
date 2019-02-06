@@ -1,0 +1,118 @@
+<!-- @authors: Enaitz Otazua y Victor del Barrio
+     @desc: este programa lee datos almacenados en 
+     dos canales de la plataforma Thingspeak y grafica 
+     sus resultados por pantalla utilizando un navegador web
+-->
+<html>
+  <head>
+    <title>ESTACION_METEOROLOGICA</title>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+	
+	/* creacion de la variable donde almacenamos los
+	   datos correspondientes al canal 1 */
+	  var jsonData_1;
+	  function myCallback_1(dataWeGotViaJsonp) {
+	    jsonData_1 = dataWeGotViaJsonp['feeds'];
+	  };
+	  
+	  /* creacion de la variable donde almacenamos los
+	   datos correspondientes al canal 2 */
+	  var jsonData_2;
+	  function myCallback_2(dataWeGotViaJsonp) {
+	    jsonData_2 = dataWeGotViaJsonp['feeds'];
+	  };
+	</script>
+	<script type="text/javascript" src="
+	https://api.thingspeak.com/channels/694049/feeds.json?api_key=LLEPG07A5VHE2UOT&results=64&callback=myCallback_1">
+	</script>
+	<script type="text/javascript" src="
+	https://api.thingspeak.com/channels/694050/feeds.json?api_key=4SNAOLWA8LAS7LS0&results=64&callback=myCallback_2">
+	</script>
+	<script type="text/javascript">
+	google.charts.load('current',{'packages':['corechart']});
+	google.charts.setOnLoadCallback(drawChart1);
+	google.charts.setOnLoadCallback(drawChart2);
+	
+	/* funcion que dibuja la grafica con los datos
+	   de temperatura adquiridos desde los dos canales */
+	function drawChart1() {
+	  var data = new google.visualization.DataTable();
+	  data.addColumn('datetime','Time');
+	  data.addColumn('number','TEMPERATURA');
+	  
+	  var length = jsonData_1.length+jsonData_2.length;
+	  var j=0;
+	  var k=0;
+	  for(var i = 1;i <= length; i++){
+	      if (i %2 == 0){
+		    var timestamp = jsonData_2[j]['created_at'];
+		    var temp = jsonData_2[j]['field1'];
+			j=j+1;
+		  }
+		  else {
+		  var timestamp = jsonData_1[k]['created_at'];
+		  var temp = jsonData_1[k]['field1'];
+		  k=k+1;
+		  }
+		data.addRow([new Date(timestamp), parseFloat(temp)]);
+	  };
+	  
+	  var options = {
+	    title: 'TEMPERATURA', legend: 'none',
+		curveType: 'function', colors: ['red'],
+		series: {0: {targetAxisIndex: 0}},
+		vAxes: {0: {title: 'ºC'}},
+		hAxes: {0: {title: 'tiempo'}},
+		width:1400,
+		height:300
+	  };
+	  var chart = new google.visualization.LineChart (document.getElementById('curve_chart_1'));
+	  chart.draw(data, options);
+	}
+	
+		/* funcion que dibuja la grafica con los datos
+	   de humedad adquiridos desde los dos canales */	
+    function drawChart2() {
+	  var data = new google.visualization.DataTable();
+	  data.addColumn('datetime','Time');
+	  data.addColumn('number','HUMEDAD');
+	  
+	  var length = jsonData_1.length+jsonData_2.length;
+	  var j=0;
+	  var k=0;
+	  for(var i = 1;i <= length; i++){
+	      if (i %2 == 0){
+		    var timestamp = jsonData_2[j]['created_at'];
+	        var humedad =jsonData_2[j]['field2'];
+			j=j+1;
+		  }
+		  else {
+		  var timestamp = jsonData_1[k]['created_at'];
+	      var humedad =jsonData_1[k]['field2'];
+		  k=k+1;
+		  }
+		data.addRow([new Date(timestamp), parseFloat(humedad)]);
+	  };
+	  
+	  var options = {
+	    title: 'HUMEDAD AMBIENTAL', legend: 'none',
+		curveType: 'function', colors: ['blue'],
+		series: {1:{targetAxisIndex: 1}},
+		vAxes: {0: {title: '%'}},
+		hAxes: {0: {title: 'tiempo'}},
+		width:1400,
+		height:300
+	  };
+	  var chart = new google.visualization.LineChart (document.getElementById('curve_chart_2'));
+	  chart.draw(data, options);
+	}
+	</script>
+  </head>
+  <body>
+ <!-- Llamada a las funciones para dibujar las graficas -->   
+        <div id = "curve_chart_1" > </div>
+	    <div id = "curve_chart_2" > </div>
+	
+  </body>
+</html>

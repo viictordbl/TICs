@@ -78,15 +78,12 @@ WRITE_API_KEY_2 = contenido_json['api_keys'][0]['api_key']
 try:
     # Utilizamos un flag para determinar el canal en el que debemos guardar
     # los datos en funcion del instante en el que se ha tomado la medida
-    
-	flag = True
-	
-	sensor = Adafruit_DHT.AM2302
-	pin = '4'
-
+    sensor = Adafruit_DHT.AM2302
+    pin = '4'
+    flag = True
     while (True):
-        humidity, temperature = Adafruit_DHT.read_retry(sensor, pin, delay_seconds=0)
-		print('Temperatura={0:0.1f}*  Humedad={1:0.1f}%'.format(temperature, humidity))
+        humidity, temperature = Adafruit_DHT.read_retry(sensor, pin, delay_seconds=0.00)
+        print('Temperatura:{0:0.1f}\tHumedad:{1:0.1f}'.format(temperature, humidity))
 		
         if flag == True:
             WRITE_API_KEY = WRITE_API_KEY_1

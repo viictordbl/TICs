@@ -111,6 +111,7 @@ try:
         respuesta = connTCP.getresponse()
         status = respuesta.status
         print(str(status))
+        print(respuesta.read())
         flag = not flag
 		time.sleep(10)
 		

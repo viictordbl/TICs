@@ -50,7 +50,7 @@ title('Humidity');
 xlabel('Time');
 ylabel('%');
 
-%% REGULADOR TEMPERATURA INVERNADERO %%
+%% REGULADOR TEMPERATURA INVERNADERO 
 
 % almacenamos los valores de temperatura adquiridos 
 temp = data(:,1);

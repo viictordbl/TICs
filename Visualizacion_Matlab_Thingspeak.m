@@ -49,3 +49,30 @@ plot(time,data(:,2));
 title('Humidity');
 xlabel('Time');
 ylabel('%');
+
+%% REGULADOR TEMPERATURA INVERNADERO %%
+
+% almacenamos los valores de temperatura adquiridos 
+temp = data(:,1);
+% definimos la funcion de transferencia de nuestro invernadero
+s=tf('s');
+sys=1/(50*s+1);
+% discretizar el sistema con el tiempo de muestreo de la toma de datos
+sys_d=c2d(sys,10);
+% estudiamos la dinamica del sistema
+t=0:10:1279;
+t=t';
+y=lsim(sys_d,temp,t);
+figure(3);
+plot(t,y);
+% diseñamos el controlador para que se adapte a nuestras exigencias
+C=(2*(50*s+1))/(50*s);
+% comparamos las mejoras en las características de la respuesta
+sys_lc=feedback(C*sys,1);
+sys_lc_d=c2d(sys_lc,10);
+y_lc=lsim(sys_lc_d,temp,t);
+hold on;
+plot(t,y_lc);
+xlabel('segundos')
+ylabel('temperatura ºC')
+legend('original','PI')
